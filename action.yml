@@ -73,10 +73,10 @@ runs:
       env:
         TARGET_BRANCH: ${{ inputs.target-branch }}
 
-    - name: Check changes
-      id: check-changes
+    - name: Check for new commits
+      id: check-commits
       run: |
-        if git diff --quiet HEAD "upstream/$UPSTREAM_BRANCH"; then
+        if [ "$(git rev-list --count HEAD..upstream/$UPSTREAM_BRANCH)" -eq 0 ]; then
           echo "HAS_CHANGES=false" >> $GITHUB_ENV
         else
           echo "HAS_CHANGES=true" >> $GITHUB_ENV
