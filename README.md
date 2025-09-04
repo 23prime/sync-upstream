@@ -17,6 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # Required for commit comparison
 
       - name: Sync upstream
         uses: 23prime/sync-upstream@v1
