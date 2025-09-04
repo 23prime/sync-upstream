@@ -12,7 +12,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  your-job:
+  sync-upstream:
     runs-on: ubuntu-latest
 
     steps:
