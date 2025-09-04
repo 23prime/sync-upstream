@@ -73,11 +73,11 @@ runs:
       env:
         TARGET_BRANCH: ${{ inputs.target-branch }}
 
-    - name: Try fast-forward merge
+    - name: Try merge
       id: merge
       run: |
         set +e
-        git merge --ff-only "upstream/$UPSTREAM_BRANCH"
+        git merge --allow-unrelated-histories "upstream/$UPSTREAM_BRANCH"
         echo "MERGE_EXIT_CODE=$?" >> $GITHUB_ENV
         set -e
       shell: bash
