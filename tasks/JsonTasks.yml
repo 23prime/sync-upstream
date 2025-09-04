@@ -11,6 +11,8 @@ tasks:
     desc: "Format JSON"
     cmds:
       - biome format --write .
+    aliases:
+      - fix
 
   lint:
     desc: "Lint JSON"
