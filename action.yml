@@ -92,7 +92,7 @@ runs:
         if git merge --allow-unrelated-histories "upstream/$UPSTREAM_BRANCH"; then
           echo "MERGE_SUCCESS=true" >> $GITHUB_ENV
         else
-          git merge --abort
+          git add -A
           echo "MERGE_SUCCESS=false" >> $GITHUB_ENV
         fi
       shell: bash
