@@ -1,0 +1,37 @@
+version: "3"
+
+includes:
+  mise: tasks/MiseTasks.yml
+  yml: tasks/YamlTasks.yml
+  json: tasks/JsonTasks.yml
+  md: tasks/MarkdownTasks.yml
+  gh: tasks/GitHubTasks.yml
+
+tasks:
+  default:
+    cmds:
+      - task: list
+      - task: mise:versions
+
+  list:
+    desc: List all tasks
+    cmd: task --list
+    aliases:
+      - l
+
+  setup:
+    desc: "Setup project"
+    cmds:
+      - task: mise:setup
+    aliases:
+      - s
+
+  check:
+    desc: "Check"
+    deps:
+      - yml:check
+      - json:check
+      - md:check
+      - gh:check
+    aliases:
+      - c

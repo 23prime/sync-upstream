@@ -1,0 +1,43 @@
+name: Check Markdown
+
+on:
+  push:
+    paths:
+      - "**/*.md"
+      - ".github/workflows/check-markdown.yml"
+  pull_request:
+    paths:
+      - "**/*.md"
+      - ".github/workflows/check-markdown.yml"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install mise and setup
+        uses: jdx/mise-action@v3
+        with:
+          install: true
+          install_args: "npm:markdownlint-cli"
+          cache: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fix
+        run: task md:fix
+
+      - name: Commit and Push
+        uses: 23prime/simple-commit-and-push@v1
+        with:
+          commit-message: "Auto fix code by `task md:fix`"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check
+        run: task md:check

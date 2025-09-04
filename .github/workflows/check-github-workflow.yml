@@ -1,0 +1,32 @@
+name: Check GitHub workflow
+
+on:
+  push:
+    paths:
+      - ".github/workflows/*.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/*.yml"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install mise and setup
+        uses: jdx/mise-action@v3
+        with:
+          install: true
+          install_args: "actionlint shellcheck"
+          cache: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check
+        run: task gh:check

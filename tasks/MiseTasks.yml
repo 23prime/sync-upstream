@@ -1,0 +1,19 @@
+version: "3"
+
+tasks:
+  setup:
+    desc: "Setup tools"
+    cmds:
+      - mise trust -yq
+      - mise install
+
+  versions:
+    desc: "Show tool versions"
+    cmds:
+      - mise --version
+      - uv --version
+      - yamllint --version
+      - markdownlint --version
+      - biome --version
+      - actionlint --version
+      - shellcheck --version
