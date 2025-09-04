@@ -1,0 +1,104 @@
+name: "Sync upstream"
+description: "Checks upstream, merges if possible, creates PR if conflicts."
+
+inputs:
+  upstream-url:
+    description: "GitHub repository URL of the upstream (e.g., https://github.com/owner/repo.git)"
+    required: true
+
+  upstream-branch:
+    description: "Branch name of the upstream (e.g., main)"
+    required: false
+    default: "main"
+
+  target-branch:
+    description: "Branch name of the target repository to sync (e.g., main)"
+    required: false
+    default: "main"
+
+  pr-title:
+    description: "Pull Request title when conflicts occur"
+    required: false
+    default: "Merge upstream changes (conflicts need to be resolved)"
+
+  pr-body:
+    description: "Pull Request body when conflicts occur"
+    required: false
+    default: "This PR merges changes from upstream, but conflicts must be resolved manually."
+
+  pr-branch-prefix:
+    description: "Branch name prefix when creating a PR"
+    required: false
+    default: "sync-upstream"
+
+  user-email:
+    description: "Git user.email"
+    required: false
+    default: "action@github.com"
+
+  user-name:
+    description: "Git user.name"
+    required: false
+    default: "GitHub Action"
+
+  github-token:
+    description: "GitHub token"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up git config
+      run: |
+        git config --local user.name "$USER_NAME"
+        git config --local user.email "$USER_EMAIL"
+      shell: bash
+      env:
+        USER_NAME: ${{ inputs.user-name }}
+        USER_EMAIL: ${{ inputs.user-email }}
+
+    - name: Add upstream and fetch
+      run: |
+        git remote add upstream "$UPSTREAM_URL"
+        git fetch upstream "$UPSTREAM_BRANCH"
+      shell: bash
+      env:
+        UPSTREAM_URL: ${{ inputs.upstream-url }}
+        UPSTREAM_BRANCH: ${{ inputs.upstream-branch }}
+
+    - name: Checkout target branch
+      run: |
+        git checkout "$TARGET_BRANCH"
+      shell: bash
+      env:
+        TARGET_BRANCH: ${{ inputs.target-branch }}
+
+    - name: Try fast-forward merge
+      id: merge
+      run: |
+        set +e
+        git merge --ff-only "upstream/$UPSTREAM_BRANCH"
+        echo "MERGE_EXIT_CODE=$?" >> $GITHUB_ENV
+        set -e
+      shell: bash
+      env:
+        UPSTREAM_BRANCH: ${{ inputs.upstream-branch }}
+
+    - name: Push if merged successfully
+      if: env.MERGE_EXIT_CODE == '0'
+      run: |
+        git push origin "$TARGET_BRANCH"
+      shell: bash
+      env:
+        TARGET_BRANCH: ${{ inputs.target-branch }}
+
+    - name: Create PR for conflict
+      if: env.MERGE_EXIT_CODE != '0'
+      uses: peter-evans/create-pull-request@v6
+      with:
+        token: ${{ inputs.github-token }}
+        commit-message: ${{ inputs.pr-title }}
+        title: ${{ inputs.pr-title }}
+        body: ${{ inputs.pr-body }}
+        branch: ${{ inputs.pr-branch-prefix }}-${{ github.run_id }}
+        delete-branch: true
