@@ -73,8 +73,21 @@ runs:
       env:
         TARGET_BRANCH: ${{ inputs.target-branch }}
 
+    - name: Check changes
+      id: check-changes
+      run: |
+        if git diff --quiet HEAD "upstream/$UPSTREAM_BRANCH"; then
+          echo "HAS_CHANGES=false" >> $GITHUB_ENV
+        else
+          echo "HAS_CHANGES=true" >> $GITHUB_ENV
+        fi
+      shell: bash
+      env:
+        UPSTREAM_BRANCH: ${{ inputs.upstream-branch }}
+
     - name: Try merge
       id: merge
+      if: env.HAS_CHANGES == 'true'
       run: |
         if git merge --allow-unrelated-histories "upstream/$UPSTREAM_BRANCH"; then
           echo "MERGE_SUCCESS=true" >> $GITHUB_ENV
@@ -86,7 +99,7 @@ runs:
         UPSTREAM_BRANCH: ${{ inputs.upstream-branch }}
 
     - name: Push if merged successfully
-      if: env.MERGE_SUCCESS == 'true'
+      if: env.HAS_CHANGES == 'true' && env.MERGE_SUCCESS == 'true'
       run: |
         git push origin "$TARGET_BRANCH"
       shell: bash
@@ -94,7 +107,7 @@ runs:
         TARGET_BRANCH: ${{ inputs.target-branch }}
 
     - name: Create PR for conflict
-      if: env.MERGE_SUCCESS == 'false'
+      if: env.HAS_CHANGES == 'true' && env.MERGE_SUCCESS == 'false'
       uses: peter-evans/create-pull-request@v6
       with:
         token: ${{ inputs.github-token }}
