@@ -7,6 +7,10 @@ A GitHub Action that syncs upstream repository changes. It automatically merges 
 Add the following to your workflow:
 
 ```yaml
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   your-job:
     runs-on: ubuntu-latest
