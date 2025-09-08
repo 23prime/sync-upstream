@@ -73,19 +73,34 @@ runs:
       env:
         TARGET_BRANCH: ${{ inputs.target-branch }}
 
-    - name: Try fast-forward merge
-      id: merge
+    - name: Check for new commits
+      id: check-commits
       run: |
-        set +e
-        git merge --ff-only "upstream/$UPSTREAM_BRANCH"
-        echo "MERGE_EXIT_CODE=$?" >> $GITHUB_ENV
-        set -e
+        if [ "$(git rev-list --count HEAD..upstream/$UPSTREAM_BRANCH)" -eq 0 ]; then
+          echo "HAS_CHANGES=false" >> $GITHUB_ENV
+        else
+          echo "HAS_CHANGES=true" >> $GITHUB_ENV
+        fi
+      shell: bash
+      env:
+        UPSTREAM_BRANCH: ${{ inputs.upstream-branch }}
+
+    - name: Try merge
+      id: merge
+      if: env.HAS_CHANGES == 'true'
+      run: |
+        if git merge --allow-unrelated-histories "upstream/$UPSTREAM_BRANCH"; then
+          echo "MERGE_SUCCESS=true" >> $GITHUB_ENV
+        else
+          git add -A
+          echo "MERGE_SUCCESS=false" >> $GITHUB_ENV
+        fi
       shell: bash
       env:
         UPSTREAM_BRANCH: ${{ inputs.upstream-branch }}
 
     - name: Push if merged successfully
-      if: env.MERGE_EXIT_CODE == '0'
+      if: env.HAS_CHANGES == 'true' && env.MERGE_SUCCESS == 'true'
       run: |
         git push origin "$TARGET_BRANCH"
       shell: bash
@@ -93,7 +108,7 @@ runs:
         TARGET_BRANCH: ${{ inputs.target-branch }}
 
     - name: Create PR for conflict
-      if: env.MERGE_EXIT_CODE != '0'
+      if: env.HAS_CHANGES == 'true' && env.MERGE_SUCCESS == 'false'
       uses: peter-evans/create-pull-request@v7
       with:
         token: ${{ inputs.github-token }}

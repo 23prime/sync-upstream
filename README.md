@@ -7,12 +7,18 @@ A GitHub Action that syncs upstream repository changes. It automatically merges 
 Add the following to your workflow:
 
 ```yaml
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
-  your-job:
+  sync-upstream:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # Required for commit comparison
 
       - name: Sync upstream
         uses: 23prime/sync-upstream@v1
