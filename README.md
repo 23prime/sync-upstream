@@ -33,15 +33,15 @@ jobs:
 
 | Name                | Required | Default Value                                    | Description                                            |
 |---------------------|----------|--------------------------------------------------|--------------------------------------------------------|
-| `upstream-url`      | Required | None                                             | GitHub repository URL of the upstream                  |
-| `upstream-branch`   | Optional | `main`                                           | Branch name of the upstream                            |
-| `target-branch`     | Optional | `main`                                           | Branch name of the target repository to sync          |
-| `always-use-pr`     | Optional | `false`                                          | Always create a pull request instead of direct push (useful for branch protection) |
+| `upstream-url`      | Required | None                                             | GitHub repository URL of the upstream (e.g., https://github.com/owner/repo.git) |
+| `upstream-branch`   | Optional | `main`                                           | Branch name of the upstream (e.g., main)              |
+| `target-branch`     | Optional | `main`                                           | Branch name of the target repository to sync (e.g., main) |
+| `user-email`        | Optional | `action@github.com`                              | Git user.email                                         |
+| `user-name`         | Optional | `GitHub Action`                                  | Git user.name                                          |
 | `pr-title`          | Optional | `Merge upstream changes`                         | Pull Request title when creating a PR                 |
 | `pr-body`           | Optional | `This PR merges changes from upstream.`          | Pull Request body when creating a PR                  |
 | `pr-branch-prefix`  | Optional | `sync-upstream`                                  | Branch name prefix when creating a PR                 |
-| `user-email`        | Optional | `action@github.com`                              | Git user.email                                         |
-| `user-name`         | Optional | `GitHub Action`                                  | Git user.name                                          |
+| `always-use-pr`     | Optional | `false`                                          | Always create a pull request instead of direct push (useful for branch protection) |
 | `github-token`      | Required | None                                             | GitHub token                                           |
 
 ## For Developers
