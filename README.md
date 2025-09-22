@@ -33,7 +33,7 @@ jobs:
 
 | Name                | Required | Default Value                                    | Description                                            |
 |---------------------|----------|--------------------------------------------------|--------------------------------------------------------|
-| `upstream-url`      | Required | None                                             | GitHub repository URL of the upstream (e.g., https://github.com/owner/repo.git) |
+| `upstream-url`      | Required | None                                             | GitHub repository URL of the upstream (e.g., <https://github.com/owner/repo.git>) |
 | `upstream-branch`   | Optional | `main`                                           | Branch name of the upstream (e.g., main)              |
 | `target-branch`     | Optional | `main`                                           | Branch name of the target repository to sync (e.g., main) |
 | `user-email`        | Optional | `action@github.com`                              | Git user.email                                         |
