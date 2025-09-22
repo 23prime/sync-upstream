@@ -2,7 +2,9 @@
 
 A GitHub Action that syncs upstream repository changes. It automatically merges changes if there are no conflicts, or creates a pull request if conflicts need to be resolved manually.
 
-## Usage (Example)
+## Usage
+
+### Example
 
 Add the following to your workflow:
 
