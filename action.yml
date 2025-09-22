@@ -17,19 +17,24 @@ inputs:
     default: "main"
 
   pr-title:
-    description: "Pull Request title when conflicts occur"
+    description: "Pull Request title when creating a PR"
     required: false
-    default: "Merge upstream changes (conflicts need to be resolved)"
+    default: "Merge upstream changes"
 
   pr-body:
-    description: "Pull Request body when conflicts occur"
+    description: "Pull Request body when creating a PR"
     required: false
-    default: "This PR merges changes from upstream, but conflicts must be resolved manually."
+    default: "This PR merges changes from upstream."
 
   pr-branch-prefix:
     description: "Branch name prefix when creating a PR"
     required: false
     default: "sync-upstream"
+
+  always-use-pr:
+    description: "Always create a pull request instead of direct push (useful for branch protection)"
+    required: false
+    default: "false"
 
   user-email:
     description: "Git user.email"
@@ -100,15 +105,15 @@ runs:
         UPSTREAM_BRANCH: ${{ inputs.upstream-branch }}
 
     - name: Push if merged successfully
-      if: env.HAS_CHANGES == 'true' && env.MERGE_SUCCESS == 'true'
+      if: env.HAS_CHANGES == 'true' && env.MERGE_SUCCESS == 'true' && inputs.always-use-pr == 'false'
       run: |
         git push origin "$TARGET_BRANCH"
       shell: bash
       env:
         TARGET_BRANCH: ${{ inputs.target-branch }}
 
-    - name: Create PR for conflict
-      if: env.HAS_CHANGES == 'true' && env.MERGE_SUCCESS == 'false'
+    - name: Create PR for conflict or when always-use-pr is enabled
+      if: env.HAS_CHANGES == 'true' && (env.MERGE_SUCCESS == 'false' || inputs.always-use-pr == 'true')
       uses: peter-evans/create-pull-request@v7
       with:
         token: ${{ inputs.github-token }}

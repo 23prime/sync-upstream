@@ -34,8 +34,9 @@ jobs:
 | `upstream-url`      | Required | None                                             | GitHub repository URL of the upstream                  |
 | `upstream-branch`   | Optional | `main`                                           | Branch name of the upstream                            |
 | `target-branch`     | Optional | `main`                                           | Branch name of the target repository to sync          |
-| `pr-title`          | Optional | `Merge upstream changes (conflicts need to be resolved)` | Pull Request title when conflicts occur               |
-| `pr-body`           | Optional | `This PR merges changes from upstream, but conflicts must be resolved manually.` | Pull Request body when conflicts occur                |
+| `always-use-pr`     | Optional | `false`                                          | Always create a pull request instead of direct push (useful for branch protection) |
+| `pr-title`          | Optional | `Merge upstream changes`                         | Pull Request title when creating a PR                 |
+| `pr-body`           | Optional | `This PR merges changes from upstream.`          | Pull Request body when creating a PR                  |
 | `pr-branch-prefix`  | Optional | `sync-upstream`                                  | Branch name prefix when creating a PR                 |
 | `user-email`        | Optional | `action@github.com`                              | Git user.email                                         |
 | `user-name`         | Optional | `GitHub Action`                                  | Git user.name                                          |
