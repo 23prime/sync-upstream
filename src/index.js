@@ -13,7 +13,6 @@ export async function run() {
     const prTitle = core.getInput("pr-title") || "Merge upstream changes";
     const prBody = core.getInput("pr-body") || "This PR merges changes from upstream.";
     const prBranchPrefix = core.getInput("pr-branch-prefix") || "sync-upstream";
-    const alwaysUsePr = core.getInput("always-use-pr") === "true";
     const githubToken = core.getInput("github-token", { required: true });
 
     core.startGroup("Setting up git config");
@@ -65,38 +64,29 @@ export async function run() {
       return;
     }
 
-    core.startGroup("Attempting merge");
-    let mergeSuccess = false;
-    try {
-      await exec.exec("git", ["merge", "--allow-unrelated-histories", `upstream/${upstreamBranch}`]);
-      mergeSuccess = true;
-      core.info("Merge successful!");
-    } catch (error) {
-      core.warning(`Merge failed with conflicts: ${error.message}`);
-      await exec.exec("git", ["add", "-A"]);
-      mergeSuccess = false;
-    }
-    core.endGroup();
-
-    // If merge succeeded and always-use-pr is false, push directly
-    if (mergeSuccess && !alwaysUsePr) {
-      core.startGroup("Pushing to target branch");
-      await exec.exec("git", ["push", "origin", targetBranch]);
-      core.info("Changes pushed successfully!");
-      core.endGroup();
-      return;
-    }
-
-    // Create PR for conflicts or when always-use-pr is enabled
-    core.startGroup("Creating pull request");
+    // Create PR branch and merge
+    core.startGroup("Creating PR branch and merging");
     const octokit = github.getOctokit(githubToken);
     const prBranch = `${prBranchPrefix}-${github.context.runId}`;
 
-    // Push to PR branch
+    // Create and checkout PR branch
     await exec.exec("git", ["checkout", "-b", prBranch]);
+
+    // Attempt merge
+    try {
+      await exec.exec("git", ["merge", "--allow-unrelated-histories", `upstream/${upstreamBranch}`]);
+      core.info("Merge successful!");
+    } catch (error) {
+      core.setFailed(`Merge failed with conflicts: ${error.message}`);
+      throw error;
+    }
+
+    // Push to PR branch
     await exec.exec("git", ["push", "-u", "origin", prBranch]);
+    core.endGroup();
 
     // Create PR
+    core.startGroup("Creating pull request");
     const { data: pr } = await octokit.rest.pulls.create({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,

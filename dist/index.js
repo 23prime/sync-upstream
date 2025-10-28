@@ -31250,9 +31250,6 @@ function requireGithub () {
 
 var githubExports = requireGithub();
 
-// TODO: add act
-// TODO: extract each group into functions
-
 async function run() {
   try {
     // Get inputs
@@ -31264,7 +31261,6 @@ async function run() {
     const prTitle = coreExports.getInput("pr-title") || "Merge upstream changes";
     const prBody = coreExports.getInput("pr-body") || "This PR merges changes from upstream.";
     const prBranchPrefix = coreExports.getInput("pr-branch-prefix") || "sync-upstream";
-    const alwaysUsePr = coreExports.getInput("always-use-pr") === "true";
     const githubToken = coreExports.getInput("github-token", { required: true });
 
     coreExports.startGroup("Setting up git config");
@@ -31316,38 +31312,29 @@ async function run() {
       return;
     }
 
-    coreExports.startGroup("Attempting merge");
-    let mergeSuccess = false;
-    try {
-      await execExports.exec("git", ["merge", "--allow-unrelated-histories", `upstream/${upstreamBranch}`]);
-      mergeSuccess = true;
-      coreExports.info("Merge successful!");
-    } catch (error) {
-      coreExports.warning(`Merge failed with conflicts: ${error.message}`);
-      await execExports.exec("git", ["add", "-A"]);
-      mergeSuccess = false;
-    }
-    coreExports.endGroup();
-
-    // If merge succeeded and always-use-pr is false, push directly
-    if (mergeSuccess && !alwaysUsePr) {
-      coreExports.startGroup("Pushing to target branch");
-      await execExports.exec("git", ["push", "origin", targetBranch]);
-      coreExports.info("Changes pushed successfully!");
-      coreExports.endGroup();
-      return;
-    }
-
-    // Create PR for conflicts or when always-use-pr is enabled
-    coreExports.startGroup("Creating pull request");
+    // Create PR branch and merge
+    coreExports.startGroup("Creating PR branch and merging");
     const octokit = githubExports.getOctokit(githubToken);
     const prBranch = `${prBranchPrefix}-${githubExports.context.runId}`;
 
-    // Push to PR branch
+    // Create and checkout PR branch
     await execExports.exec("git", ["checkout", "-b", prBranch]);
+
+    // Attempt merge
+    try {
+      await execExports.exec("git", ["merge", "--allow-unrelated-histories", `upstream/${upstreamBranch}`]);
+      coreExports.info("Merge successful!");
+    } catch (error) {
+      coreExports.setFailed(`Merge failed with conflicts: ${error.message}`);
+      throw error;
+    }
+
+    // Push to PR branch
     await execExports.exec("git", ["push", "-u", "origin", prBranch]);
+    coreExports.endGroup();
 
     // Create PR
+    coreExports.startGroup("Creating pull request");
     const { data: pr } = await octokit.rest.pulls.create({
       owner: githubExports.context.repo.owner,
       repo: githubExports.context.repo.repo,

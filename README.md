@@ -1,6 +1,6 @@
 # Sync Upstream Action
 
-A GitHub Action that syncs upstream repository changes. It automatically merges changes if there are no conflicts, or creates a pull request if conflicts need to be resolved manually.
+A GitHub Action that syncs upstream repository changes by creating a pull request. If there are merge conflicts, the workflow will fail and you need to resolve them manually.
 
 ## Usage
 
@@ -41,7 +41,6 @@ jobs:
 | `pr-title`          | Optional | `Merge upstream changes`                         | Pull Request title when creating a PR                 |
 | `pr-body`           | Optional | `This PR merges changes from upstream.`          | Pull Request body when creating a PR                  |
 | `pr-branch-prefix`  | Optional | `sync-upstream`                                  | Branch name prefix when creating a PR                 |
-| `always-use-pr`     | Optional | `false`                                          | Always create a pull request instead of direct push (useful for branch protection) |
 | `github-token`      | Required | None                                             | GitHub token                                           |
 
 ## For Developers

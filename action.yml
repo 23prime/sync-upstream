@@ -41,11 +41,6 @@ inputs:
     required: false
     default: "sync-upstream"
 
-  always-use-pr:
-    description: "Always create a pull request instead of direct push (useful for branch protection)"
-    required: false
-    default: "false"
-
   github-token:
     description: "GitHub token"
     required: true

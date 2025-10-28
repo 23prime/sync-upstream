@@ -26,7 +26,6 @@ describe("sync-upstream action", () => {
         "pr-title": "Test PR",
         "pr-body": "Test PR body",
         "pr-branch-prefix": "test-sync",
-        "always-use-pr": "false",
         "github-token": "fake-token",
       };
       return inputs[name] || "";
@@ -129,7 +128,22 @@ describe("sync-upstream action", () => {
     expect(core.info).toHaveBeenCalledWith("No new commits from upstream. Exiting.");
   });
 
-  it("should push directly when merge succeeds and always-use-pr is false", async () => {
+  it("should create PR branch and merge successfully", async () => {
+    const { default: github } = await import("@actions/github");
+    const mockOctokit = {
+      rest: {
+        pulls: {
+          create: vi.fn().mockResolvedValue({
+            data: { number: 1, html_url: "https://github.com/test/repo/pull/1" },
+          }),
+          list: vi.fn().mockResolvedValue({ data: [] }),
+        },
+      },
+    };
+    vi.mocked(github.getOctokit).mockReturnValue(mockOctokit);
+    Object.defineProperty(github.context, "runId", { value: 12345, writable: true });
+    Object.defineProperty(github.context, "repo", { value: { owner: "test", repo: "repo" }, writable: true });
+
     vi.mocked(exec.exec).mockImplementation(async (cmd, args, options) => {
       if (args && args[0] === "rev-list") {
         if (options?.listeners?.stdout) {
@@ -141,6 +155,35 @@ describe("sync-upstream action", () => {
 
     await run();
 
-    expect(exec.exec).toHaveBeenCalledWith("git", ["push", "origin", "main"]);
+    expect(exec.exec).toHaveBeenCalledWith("git", ["checkout", "-b", "test-sync-12345"]);
+    expect(exec.exec).toHaveBeenCalledWith("git", ["merge", "--allow-unrelated-histories", "upstream/main"]);
+    expect(exec.exec).toHaveBeenCalledWith("git", ["push", "-u", "origin", "test-sync-12345"]);
+    expect(mockOctokit.rest.pulls.create).toHaveBeenCalledWith({
+      owner: "test",
+      repo: "repo",
+      title: "Test PR",
+      body: "Test PR body",
+      head: "test-sync-12345",
+      base: "main",
+    });
+  });
+
+  it("should fail when merge has conflicts", async () => {
+    vi.mocked(exec.exec).mockImplementation(async (cmd, args, options) => {
+      if (args && args[0] === "rev-list") {
+        if (options?.listeners?.stdout) {
+          options.listeners.stdout(Buffer.from("5\n"));
+        }
+        return 0;
+      }
+      if (args && args[0] === "merge") {
+        throw new Error("Merge conflict");
+      }
+      return 0;
+    });
+
+    await run();
+
+    expect(core.setFailed).toHaveBeenCalledWith("Merge failed with conflicts: Merge conflict");
   });
 });
