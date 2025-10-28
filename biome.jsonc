@@ -1,6 +1,9 @@
 // See: https://biomejs.dev/guides/configure-biome/
 {
   "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
+  "files": {
+    "includes": ["**/*.json", "**/*.jsonc", "!**/*.js"]
+  },
   "formatter": {
     "indentStyle": "space",
     "lineEnding": "lf",
