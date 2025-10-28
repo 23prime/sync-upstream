@@ -24,6 +24,7 @@ tasks:
     cmds:
       - task: fmt:check
       - task: lint
+      - task: test
 
   fix:
     desc: "Fix JavaScript"
@@ -50,3 +51,13 @@ tasks:
     desc: "Fix JavaScript linting issues"
     cmds:
       - pnpm lint:fix
+
+  test:
+    desc: "Run JavaScript tests"
+    cmds:
+      - pnpm test
+
+  test:watch:
+    desc: "Run JavaScript tests in watch mode"
+    cmds:
+      - pnpm test:watch
