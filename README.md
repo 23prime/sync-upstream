@@ -90,3 +90,4 @@ task tag:1
 ## References
 
 - [Creating a JavaScript action - GitHub Docs](https://docs.github.com/en/actions/tutorials/create-actions/create-a-javascript-action)
+- [Workflow commands for GitHub Actions - GitHub Docs](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands)
