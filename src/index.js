@@ -2,9 +2,6 @@ import * as core from "@actions/core";
 import * as exec from "@actions/exec";
 import * as github from "@actions/github";
 
-// TODO: add act
-// TODO: extract each group into functions
-
 export async function run() {
   try {
     // Get inputs
