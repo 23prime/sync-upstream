@@ -1,0 +1,52 @@
+version: "3"
+
+tasks:
+  install:
+    desc: "Install JavaScript dependencies"
+    cmds:
+      - pnpm install
+
+  build:
+    desc: "Build JavaScript project"
+    cmds:
+      - pnpm build
+
+  fix-and-check:
+    desc: "Fix and check JavaScript"
+    cmds:
+      - task: fix
+      - task: check
+    aliases:
+      - fc
+
+  check:
+    desc: "Check JavaScript"
+    cmds:
+      - task: fmt:check
+      - task: lint
+
+  fix:
+    desc: "Fix JavaScript"
+    cmds:
+      - task: fmt
+      - task: lint:fix
+
+  fmt:
+    desc: "Format JavaScript"
+    cmds:
+      - pnpm format
+
+  fmt:check:
+    desc: "Check JavaScript formatting"
+    cmds:
+      - pnpm format:check
+
+  lint:
+    desc: "Lint JavaScript"
+    cmds:
+      - pnpm lint
+
+  lint:fix:
+    desc: "Fix JavaScript linting issues"
+    cmds:
+      - pnpm lint:fix

@@ -17,3 +17,5 @@ tasks:
       - biome --version
       - actionlint --version
       - shellcheck --version
+      - node --version
+      - pnpm --version

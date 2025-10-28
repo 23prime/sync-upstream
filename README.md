@@ -55,15 +55,27 @@ jobs:
 
 1. Set up tools
 
-    ```bash
-    task setup
-    ```
+   ```bash
+   task setup
+   ```
 
-2. Check
+2. Install dependencies
 
-    ```bash
-    task check
-    ```
+   ```bash
+   task js:install
+   ```
+
+3. Check
+
+   ```bash
+   task check
+   ```
+
+4. Build
+
+   ```bash
+   task js:build
+   ```
 
 ### Release
 
@@ -74,3 +86,7 @@ Example: To release `v1`
 ```bash
 task tag:1
 ```
+
+## References
+
+- [Creating a JavaScript action - GitHub Docs](https://docs.github.com/en/actions/tutorials/create-actions/create-a-javascript-action)

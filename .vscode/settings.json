@@ -24,5 +24,10 @@
   "biome.enabled": true,
 
   // Dictionary for spell checker
-  "cSpell.words": ["shellcheck", "Taskfile"]
+  "cSpell.words": ["shellcheck", "Taskfile"],
+
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

@@ -12,3 +12,6 @@ biome = "latest"
 # GitHub Actions
 actionlint = "latest"
 shellcheck = "0.10"   # for actionlint
+
+# JavaScript
+pnpm = "latest"
