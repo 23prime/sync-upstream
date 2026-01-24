@@ -4,7 +4,7 @@ uv = "latest"       # for install yamllint
 yamllint = "latest"
 
 # Markdown
-"npm:markdownlint-cli" = "latest"
+markdownlint-cli2 = "latest"
 
 # JSON
 biome = "latest"

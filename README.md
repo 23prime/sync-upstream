@@ -31,17 +31,17 @@ jobs:
 
 ### Parameters
 
-| Name                | Required | Default Value                                    | Description                                            |
-|---------------------|----------|--------------------------------------------------|--------------------------------------------------------|
-| `upstream-url`      | Required | None                                             | GitHub repository URL of the upstream (e.g., <https://github.com/owner/repo.git>) |
-| `upstream-branch`   | Optional | `main`                                           | Branch name of the upstream (e.g., main)              |
-| `target-branch`     | Optional | `main`                                           | Branch name of the target repository to sync (e.g., main) |
-| `user-email`        | Optional | `action@github.com`                              | Git user.email                                         |
-| `user-name`         | Optional | `GitHub Action`                                  | Git user.name                                          |
-| `pr-title`          | Optional | `Merge upstream changes`                         | Pull Request title when creating a PR                 |
-| `pr-body`           | Optional | `This PR merges changes from upstream.`          | Pull Request body when creating a PR                  |
-| `pr-branch-prefix`  | Optional | `sync-upstream`                                  | Branch name prefix when creating a PR                 |
-| `github-token`      | Required | None                                             | GitHub token                                           |
+| Name                  | Required   | Default Value                                      | Description                                                                       |
+| --------------------- | ---------- | -------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `upstream-url`        | Required   | None                                               | GitHub repository URL of the upstream (e.g., <https://github.com/owner/repo.git>) |
+| `upstream-branch`     | Optional   | `main`                                             | Branch name of the upstream (e.g., main)                                          |
+| `target-branch`       | Optional   | `main`                                             | Branch name of the target repository to sync (e.g., main)                         |
+| `user-email`          | Optional   | `action@github.com`                                | Git user.email                                                                    |
+| `user-name`           | Optional   | `GitHub Action`                                    | Git user.name                                                                     |
+| `pr-title`            | Optional   | `Merge upstream changes`                           | Pull Request title when creating a PR                                             |
+| `pr-body`             | Optional   | `This PR merges changes from upstream.`            | Pull Request body when creating a PR                                              |
+| `pr-branch-prefix`    | Optional   | `sync-upstream`                                    | Branch name prefix when creating a PR                                             |
+| `github-token`        | Required   | None                                               | GitHub token                                                                      |
 
 ## For Developers
 
