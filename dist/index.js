@@ -31266,6 +31266,13 @@ async function run() {
     coreExports.startGroup("Setting up git config");
     await execExports.exec("git", ["config", "--local", "user.name", userName]);
     await execExports.exec("git", ["config", "--local", "user.email", userEmail]);
+    const basicAuth = Buffer.from(`x-access-token:${githubToken}`).toString("base64");
+    await execExports.exec("git", [
+      "config",
+      "--local",
+      "http.https://github.com/.extraheader",
+      `AUTHORIZATION: basic ${basicAuth}`,
+    ]);
     coreExports.endGroup();
 
     coreExports.startGroup("Adding upstream remote and fetching");
