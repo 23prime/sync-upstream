@@ -40,7 +40,6 @@ task check  # or task c - runs all checks
 
 Individual checks:
 
-- `task yml:check` - YAML linting with yamllint
 - `task json:check` - JSON formatting and linting with biome
 - `task md:check` - Markdown linting with markdownlint
 - `task gh:check` - GitHub Actions workflow validation with actionlint
@@ -64,7 +63,6 @@ task tag:1  # Create and push release tag v1
 - `tasks/` - Taskfile includes for different file types (YAML, JSON, Markdown, GitHub Actions)
 - Configuration files:
   - `.markdownlint-cli2.jsonc` - Markdown linting rules
-  - `.yamllint.yml` - YAML linting rules
   - `biome.jsonc` - JSON/JS formatting and linting
   - `mise.toml` - Tool versions and dependencies
   - `rollup.config.js` - Rollup bundler configuration
@@ -74,7 +72,6 @@ task tag:1  # Create and push release tag v1
 
 Tools are managed via mise and defined in `mise.toml`:
 
-- yamllint - YAML linting
 - markdownlint-cli2- Markdown linting
 - biome - JSON/JS formatting and linting
 - actionlint - GitHub Actions workflow validation
