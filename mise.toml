@@ -1,8 +1,4 @@
 [tools]
-# YAML
-uv = "latest"       # for install yamllint
-yamllint = "latest"
-
 # Markdown
 markdownlint-cli2 = "latest"
 
