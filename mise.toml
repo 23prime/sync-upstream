@@ -2,9 +2,6 @@
 # Markdown
 markdownlint-cli2 = "latest"
 
-# JSON
-biome = "latest"
-
 # GitHub Actions
 actionlint = "latest"
 shellcheck = "0.10" # for actionlint
@@ -25,19 +22,8 @@ alias = "s"
 
 [tasks.check]
 description = "Check for all issues"
-depends = ["json-check", "md-check", "gh-check", "js-fix-and-check"]
+depends = ["md-check", "gh-check", "js-fix-and-check"]
 alias = "c"
-
-# JSON
-[tasks.json-fix]
-description = "Format JSON files"
-run = "biome format --write ."
-alias = "jf"
-
-[tasks.json-check]
-description = "Check JSON formatting and linting"
-run = ["biome format --write .", "biome lint ."]
-alias = "jc"
 
 # Markdown
 [tasks.md-fix]

@@ -40,14 +40,12 @@ mise run check  # or mise run c - runs all checks
 
 Individual checks:
 
-- `mise run json-check` - JSON formatting and linting with biome
 - `mise run md-check` - Markdown linting with markdownlint
 - `mise run gh-check` - GitHub Actions workflow validation with actionlint
 
 ### Auto-fixing
 
 - `mise run md-fix` - Auto-fix markdown issues
-- `mise run json-fix` - Format JSON files
 
 ### JavaScript
 
@@ -71,6 +69,5 @@ Individual checks:
 Tools are managed via mise and defined in `mise.toml`:
 
 - markdownlint-cli2 - Markdown linting
-- biome - JSON/JS formatting and linting
 - actionlint - GitHub Actions workflow validation
 - shellcheck - Shell script linting (used by actionlint)
