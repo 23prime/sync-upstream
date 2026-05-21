@@ -25,10 +25,10 @@ importers:
         specifier: ^16.0.3
         version: 16.0.3(rollup@4.52.5)
       eslint:
-        specifier: ^9.38.0
+        specifier: ^9.18.0
         version: 9.38.0
       eslint-config-prettier:
-        specifier: ^10.1.8
+        specifier: ^10.0.1
         version: 10.1.8(eslint@9.38.0)
       prettier:
         specifier: ^3.6.2
@@ -37,7 +37,7 @@ importers:
         specifier: ^4.52.5
         version: 4.52.5
       vitest:
-        specifier: ^3.2.4
+        specifier: ^3.0.0
         version: 3.2.4
 
 packages:
