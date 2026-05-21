@@ -128,6 +128,22 @@ describe("sync-upstream action", () => {
     expect(core.info).toHaveBeenCalledWith("No new commits from upstream. Exiting.");
   });
 
+  it("should exit early when commits exist but no actual file differences", async () => {
+    vi.mocked(exec.exec).mockImplementation(async (cmd, args, options) => {
+      if (args && args[0] === "rev-list") {
+        if (options?.listeners?.stdout) {
+          options.listeners.stdout(Buffer.from("3\n"));
+        }
+      }
+      // git diff --quiet returns 0 (no diff)
+      return 0;
+    });
+
+    await run();
+
+    expect(core.info).toHaveBeenCalledWith("Commits exist but no actual file differences. Exiting.");
+  });
+
   it("should create PR branch and merge successfully", async () => {
     const { default: github } = await import("@actions/github");
     const mockOctokit = {
@@ -149,6 +165,11 @@ describe("sync-upstream action", () => {
         if (options?.listeners?.stdout) {
           options.listeners.stdout(Buffer.from("5\n"));
         }
+        return 0;
+      }
+      if (args && args[0] === "diff") {
+        // exit non-zero = has diff
+        throw new Error("has diff");
       }
       return 0;
     });
@@ -175,6 +196,9 @@ describe("sync-upstream action", () => {
           options.listeners.stdout(Buffer.from("5\n"));
         }
         return 0;
+      }
+      if (args && args[0] === "diff") {
+        throw new Error("has diff");
       }
       if (args && args[0] === "merge") {
         throw new Error("Merge conflict");

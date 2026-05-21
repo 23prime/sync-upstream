@@ -71,6 +71,22 @@ export async function run() {
       return;
     }
 
+    core.startGroup("Checking for actual file differences");
+    let hasDiff = false;
+    try {
+      await exec.exec("git", ["diff", "--quiet", `HEAD..upstream/${upstreamBranch}`]);
+      // exit code 0 means no diff
+    } catch {
+      hasDiff = true;
+    }
+    core.info(`Has actual diff: ${hasDiff}`);
+    core.endGroup();
+
+    if (!hasDiff) {
+      core.info("Commits exist but no actual file differences. Exiting.");
+      return;
+    }
+
     // Create PR branch and merge
     core.startGroup("Creating PR branch and merging");
     const octokit = github.getOctokit(githubToken);
