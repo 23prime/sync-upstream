@@ -7,7 +7,99 @@ biome = "latest"
 
 # GitHub Actions
 actionlint = "latest"
-shellcheck = "0.10"   # for actionlint
+shellcheck = "0.10" # for actionlint
 
 # JavaScript
 pnpm = "latest"
+
+
+# ================================================================
+# Tasks
+# See: https://mise.jdx.dev/tasks/toml-tasks.html
+# ================================================================
+
+[tasks.setup]
+description = "Setup tools"
+run = ["mise trust -yq", "mise install"]
+alias = "s"
+
+[tasks.check]
+description = "Check for all issues"
+depends = ["json-check", "md-check", "gh-check", "js-fix-and-check"]
+alias = "c"
+
+# JSON
+[tasks.json-fix]
+description = "Format JSON files"
+run = "biome format --write ."
+alias = "jf"
+
+[tasks.json-check]
+description = "Check JSON formatting and linting"
+run = ["biome format --write .", "biome lint ."]
+alias = "jc"
+
+# Markdown
+[tasks.md-fix]
+description = "Fix Markdown issues"
+run = "markdownlint-cli2 . --fix"
+alias = "mf"
+
+[tasks.md-check]
+description = "Check for Markdown issues"
+run = "markdownlint-cli2 ."
+alias = "mc"
+
+# GitHub Actions
+[tasks.gh-check]
+description = "Check GitHub Actions workflows"
+run = "actionlint .github/workflows/*.yml"
+alias = "ghc"
+
+# JavaScript
+[tasks.js-install]
+description = "Install JavaScript dependencies"
+run = "pnpm install"
+
+[tasks.js-build]
+description = "Build JavaScript project"
+run = "pnpm build"
+alias = "b"
+
+[tasks.js-fix-and-check]
+description = "Fix and check JavaScript"
+depends = ["js-fix"]
+run = "mise run js-check"
+alias = "jfc"
+
+[tasks.js-fix]
+description = "Fix JavaScript issues"
+depends = ["js-fmt", "js-lint-fix"]
+
+[tasks.js-check]
+description = "Check JavaScript"
+depends = ["js-fmt-check", "js-lint", "js-test"]
+
+[tasks.js-fmt]
+description = "Format JavaScript"
+run = "pnpm format"
+
+[tasks.js-fmt-check]
+description = "Check JavaScript formatting"
+run = "pnpm format:check"
+
+[tasks.js-lint]
+description = "Lint JavaScript"
+run = "pnpm lint"
+
+[tasks.js-lint-fix]
+description = "Fix JavaScript linting issues"
+run = "pnpm lint:fix"
+
+[tasks.js-test]
+description = "Run JavaScript tests"
+run = "pnpm test"
+
+[tasks.js-test-watch]
+description = "Run JavaScript tests in watch mode"
+run = "pnpm test:watch"
