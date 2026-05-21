@@ -1,10 +1,21 @@
+# ================================================================
+# Settings
+# ================================================================
+[settings]
+auto_install = false
+minimum_release_age = "3d"
+
+
+# ================================================================
+# Tools
+# ================================================================
 [tools]
 # Markdown
 markdownlint-cli2 = "latest"
 
 # GitHub Actions
 actionlint = "latest"
-shellcheck = "0.10" # for actionlint
+shellcheck = "0.10"   # for actionlint
 zizmor = "1"
 
 # Secrets
