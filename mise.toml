@@ -5,6 +5,10 @@ markdownlint-cli2 = "latest"
 # GitHub Actions
 actionlint = "latest"
 shellcheck = "0.10" # for actionlint
+zizmor = "1"
+
+# Secrets
+gitleaks = "8"
 
 # JavaScript
 pnpm = "latest"
@@ -22,7 +26,7 @@ alias = "s"
 
 [tasks.check]
 description = "Check for all issues"
-depends = ["md-check", "gh-check", "js-fix-and-check"]
+depends = ["md-check", "gh-check", "gitleaks-check", "js-fix-and-check"]
 alias = "c"
 
 # Markdown
@@ -37,10 +41,29 @@ run = "markdownlint-cli2 ."
 alias = "mc"
 
 # GitHub Actions
+[tasks.gh-fix]
+description = "Fix GitHub Actions workflows"
+run = "zizmor --fix=all ."
+alias = "ghf"
+
 [tasks.gh-check]
 description = "Check GitHub Actions workflows"
-run = "actionlint .github/workflows/*.yml"
+run = [
+  "actionlint .github/workflows/*.yml",
+  "zizmor . --persona=pedantic --min-severity=medium",
+]
 alias = "ghc"
+
+# Secrets
+[tasks.gitleaks-check]
+description = "Check for leaked secrets"
+run = "gitleaks git --redact --no-banner"
+alias = "glc"
+
+[tasks.gitleaks-protect]
+description = "Check staged files for leaked secrets"
+run = "gitleaks git --pre-commit --redact --no-banner"
+alias = "glp"
 
 # JavaScript
 [tasks.js-install]
