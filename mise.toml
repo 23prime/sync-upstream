@@ -36,10 +36,20 @@ description = "Setup tools"
 run = ["mise trust -yq", "mise install", "lefthook install"]
 alias = "s"
 
+[tasks.fix]
+description = "Fix all issues"
+depends = ["md-fix", "gh-fix", "js-fix"]
+alias = "f"
+
 [tasks.check]
 description = "Check for all issues"
-depends = ["md-check", "gh-check", "gitleaks-check", "js-fix-and-check"]
+depends = ["md-check", "gh-check", "gitleaks-check", "js-check"]
 alias = "c"
+
+[tasks.fix-and-check]
+description = "Fix all issues and check for issues"
+run = [{ task = "fix" }, { task = "check" }]
+alias = "fc"
 
 # Markdown
 [tasks.md-fix]
