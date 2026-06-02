@@ -36,6 +36,8 @@ jobs:
           install_args: "pnpm"
           cache: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          MISE_LOCKED: "1"
 
       - name: Install dependencies
         run: mise run js-install
