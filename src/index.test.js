@@ -145,7 +145,7 @@ describe("sync-upstream action", () => {
   });
 
   it("should create PR branch and merge successfully", async () => {
-    const { default: github } = await import("@actions/github");
+    const github = await import("@actions/github");
     const mockOctokit = {
       rest: {
         pulls: {
