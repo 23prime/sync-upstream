@@ -29,6 +29,6 @@
     "eslint-config-prettier": "^10.0.1",
     "prettier": "^3.6.2",
     "rollup": "^4.52.5",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.8"
   }
 }
