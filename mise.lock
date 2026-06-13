@@ -159,6 +159,7 @@ url = "https://github.com/koalaman/shellcheck/releases/download/v0.10.0/shellche
 url = "https://github.com/koalaman/shellcheck/releases/download/v0.10.0/shellcheck-v0.10.0.linux.aarch64.tar.xz"
 
 [tools.shellcheck."platforms.linux-x64"]
+checksum = "blake3:729ad9734a3d9ecaf613b25714d6c70812e8808270c13cbe19eca2412f0ffc2d"
 url = "https://github.com/koalaman/shellcheck/releases/download/v0.10.0/shellcheck-v0.10.0.linux.x86_64.tar.xz"
 
 [tools.shellcheck."platforms.linux-x64-musl"]
