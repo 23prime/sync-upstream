@@ -16,7 +16,7 @@ markdownlint-cli2 = "latest"
 # GitHub Actions
 actionlint = "latest"
 shellcheck = "0.11.0"   # for actionlint
-zizmor = "1"
+zizmor = "1.26.1"
 
 # JavaScript
 pnpm = "latest"
