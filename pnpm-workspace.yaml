@@ -1,7 +1,7 @@
-blockExoticSubdeps: true
+allowBuilds:
+  esbuild: false
 
-ignoredBuiltDependencies:
-  - esbuild
+blockExoticSubdeps: true
 
 minimumReleaseAge: 4320
 
