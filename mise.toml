@@ -22,7 +22,7 @@ zizmor = "1.29.0"
 pnpm = "latest"
 
 # Git
-lefthook = "2.1.11"
+lefthook = "2.1.12"
 gitleaks = "8"
 
 
