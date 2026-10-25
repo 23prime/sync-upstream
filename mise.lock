@@ -136,7 +136,7 @@ version = "0.23.3"
 backend = "npm:markdownlint-cli2"
 
 [[tools.pnpm]]
-version = "12.10.1"
+version = "12.15.0"
 backend = "aqua:pnpm/pnpm"
 
 [tools.pnpm."platforms.linux-arm64"]
